@@ -26,7 +26,7 @@ const definitionTypeName = (ref): string => {
   if (!found) {
     return "";
   }
-  return found[1] || found[2];
+  return found[1].replace("-","").replace('.', '') || found[2].replace("-","").replace('.', '');
 };
 
 const stripBrackets = (name: string) => name.replace(/[[\]']+/g, "");
@@ -89,7 +89,7 @@ const propertiesList = (definition: Object) => {
   }
 
   if (definition.$ref) {
-    return { $ref: definitionTypeName(definition.$ref) };
+    return { $ref: definitionTypeName(definition.$ref).replace("-","").replace('.', '') };
   }
 
   if ("type" in definition && definition.type !== "object") {
@@ -167,7 +167,7 @@ const generate = (swagger: Object): string => {
       return arr;
     }, [])
     .map(definition => {
-      const s = `export type ${definition.title} = ${propertiesTemplate(
+      const s = `export type ${definition.title.replace("-","").replace('.', '')} = ${propertiesTemplate(
         definition.properties
       ).replace(/"/g, "")};`;
       return s;
